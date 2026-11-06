@@ -1,0 +1,17 @@
+{{- if .Values.state.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "github-mm-bot.fullname" . }}-state
+  labels:
+    {{- include "github-mm-bot.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.state.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.state.size }}
+  {{- if .Values.state.storageClassName }}
+  storageClassName: {{ .Values.state.storageClassName }}
+  {{- end }}
+{{- end }}

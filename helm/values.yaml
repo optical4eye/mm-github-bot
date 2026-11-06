@@ -1,0 +1,42 @@
+# Default values for github-mm-bot
+
+replicaCount: 1
+
+image:
+  repository: local_mm-bot
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Webhook URL for Mattermost incoming webhook.
+# If set, a Kubernetes Secret will be created automatically and mounted as env var.
+mattermostWebhookUrl: ""
+
+# GitHub repositories to monitor
+repositories:
+  - owner: openbao
+    repo: openbao
+
+checkIntervalSeconds: 3600
+logLevel: INFO
+
+state:
+  enabled: true
+  size: 1Gi
+  storageClassName: ""
+  accessMode: ReadWriteOnce
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

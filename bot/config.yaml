@@ -1,0 +1,18 @@
+repositories:
+  - owner: openbao
+    repo: openbao
+  - owner: hashicorp
+    repo: terraform
+  - owner: nklmilojevic
+    repo: sofka
+  - owner: cilium
+    repo: cilium
+
+check_interval_seconds: 3600
+
+# mattermost:
+#   webhook_url: http://localhost:8065/hooks/12312312
+
+state_file: /data/state.json
+
+log_level: INFO

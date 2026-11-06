@@ -1,0 +1,6 @@
+{
+  "openbao/openbao": "v2.7.2",
+  "hashicorp/terraform": "v1.17.1",
+  "nklmilojevic/sofka": "v0.34.0",
+  "cilium/cilium": "1.21.0-pre.4"
+}

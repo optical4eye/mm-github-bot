@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - mm-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mattermost
+      POSTGRES_USER: mmuser
+      POSTGRES_PASSWORD: mmuser_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mmuser -d mattermost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mattermost:
+    image: mattermost/mattermost-prod-app:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8065:8000"
+    volumes:
+      - mm-app-data:/mattermost/data
+    environment:
+      MM_SERVICESETTINGS_SITEURL: http://localhost:8065
+      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@db:5432/mattermost?sslmode=disable&connect_timeout=10
+
+  bot:
+    build:
+      context: ./bot
+    depends_on:
+      - mattermost
+    environment:
+      CONFIG_PATH: /app/config.yaml
+      MM_WEBHOOK_URL: http://mattermost:8000/hooks/br6y5qz7ffndpg14h94n58ww9c
+    volumes:
+      - ./bot/config.yaml:/app/config.yaml:ro
+      - ./bot/state.json:/data/state.json
+    restart: unless-stopped
+
+volumes:
+  mm-db-data:
+  mm-app-data:

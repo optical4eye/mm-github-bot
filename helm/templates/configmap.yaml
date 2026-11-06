@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "github-mm-bot.fullname" . }}
+  labels:
+    {{- include "github-mm-bot.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    repositories:
+      {{- range .Values.repositories }}
+      - owner: {{ .owner }}
+        repo: {{ .repo }}
+      {{- end }}
+    check_interval_seconds: {{ .Values.checkIntervalSeconds }}
+    state_file: /data/state.json
+    log_level: {{ .Values.logLevel }}

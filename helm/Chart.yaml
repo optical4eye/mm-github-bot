@@ -1,0 +1,6 @@
+apiVersion: v2
+name: github-mm-bot
+description: A bot that checks GitHub releases and posts to Mattermost
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
