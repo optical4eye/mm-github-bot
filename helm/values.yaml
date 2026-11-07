@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  repository: local_mm-bot
+  repository: mm-github-bot-bot
   pullPolicy: IfNotPresent
   tag: "latest"
 

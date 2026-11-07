@@ -1,19 +1,24 @@
 import json
-from urllib.request import Request, urlopen
-from urllib.error import URLError, HTTPError
+import httpx2 as httpx
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+_client = httpx.Client(
+    timeout=httpx.Timeout(15.0, connect=10.0),
+    headers={"Content-Type": "application/json"},
+)
 
 
+@retry(
+    wait=wait_exponential(multiplier=1, min=2, max=30),
+    stop=stop_after_attempt(3),
+    retry=retry_if_exception_type((httpx.RequestError, httpx.HTTPStatusError)),
+    reraise=True,
+)
 def send_webhook(webhook_url: str, payload: dict) -> bool:
-    data = json.dumps(payload).encode("utf-8")
-    req = Request(
-        webhook_url,
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    try:
-        with urlopen(req, timeout=15) as resp:
-            return resp.status == 200
-    except (URLError, HTTPError) as e:
-        print(f"Mattermost webhook error: {e}")
-        return False
+    resp = _client.post(webhook_url, json=payload)
+    resp.raise_for_status()
+    return True
+
+
+def close_client():
+    _client.close()

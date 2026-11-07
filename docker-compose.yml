@@ -33,10 +33,10 @@ services:
       - mattermost
     environment:
       CONFIG_PATH: /app/config.yaml
-      MM_WEBHOOK_URL: http://mattermost:8000/hooks/br6y5qz7ffndpg14h94n58ww9c
+      MM_WEBHOOK_URL: http://mattermost:8000/hooks/mqtfncnwotnqdyyzmrt87uyhec
     volumes:
       - ./bot/config.yaml:/app/config.yaml:ro
-      - ./bot/state.json:/data/state.json
+      #- ./bot/state.json:/data/state.json
     restart: unless-stopped
 
 volumes:
