@@ -1,7 +1,10 @@
 import asyncio
 import logging
 import sys
-from contextlib import asynccontextmanager
+
+# Suppress httpx2/httpcore2 request logging BEFORE importing modules that use them
+logging.getLogger("httpx2").setLevel(logging.WARNING)
+logging.getLogger("httpcore2").setLevel(logging.WARNING)
 
 import yaml
 from pydantic import ValidationError
